@@ -6,6 +6,7 @@ namespace lab4TestsGenerator.Core
 {
     public class TestsGenerator
     {
+        private static readonly string NamespaceName = "HelloTestsGenerator";
         public bool Generate(string src, out List<Test>? tests)
         {
             tests = null;
@@ -16,33 +17,29 @@ namespace lab4TestsGenerator.Core
                 return false;
             }
             // get all using directives and classes declarations
-            var srcUsings = root.DescendantNodes().OfType<UsingDirectiveSyntax>();
-            var srcClasses = root.DescendantNodes().OfType<ClassDeclarationSyntax>()
-                .Where(resultClass => resultClass.Modifiers.Any(SyntaxKind.PublicKeyword)).ToList();
+            _usings = root.DescendantNodes().OfType<UsingDirectiveSyntax>().ToList();
+            _usings.Add(
+                SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName("NUnit.Framework"))
+            );
             // generate tests for all classes
-            foreach (var srcClass in srcClasses)
-            {
-                
-            }
+            var classes = root.DescendantNodes().OfType<ClassDeclarationSyntax>()
+                .Where(_class => _class.Modifiers.Any(SyntaxKind.PublicKeyword))
+                .Where(_class => ! _class.Modifiers.Any(SyntaxKind.StaticKeyword));
+
+            tests = classes.Select(GenerateTest).ToList();
             // eok
             return true;
         }
 
-        public bool Save(string path)
+        private List<UsingDirectiveSyntax> _usings;
+
+        private Test GenerateTest(ClassDeclarationSyntax classDeclaration)
         {
             
+
+            //
+            return new Test(className, tree);
         }
-
-        public bool Wait()
-        {
-
-        }
-
-        public bool Stop()
-        {
-
-        }
-
 
     }
 }
