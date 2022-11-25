@@ -22,7 +22,7 @@ namespace lab4TestsGenerator.Core
             // generate tests for all classes
             foreach (var srcClass in srcClasses)
             {
-
+                
             }
             // eok
             return true;
@@ -30,7 +30,7 @@ namespace lab4TestsGenerator.Core
 
         public bool Save(string path)
         {
-
+            
         }
 
         public bool Wait()

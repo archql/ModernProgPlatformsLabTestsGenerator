@@ -8,5 +8,9 @@ namespace lab4TestsGenerator.Core
 {
     public class Test
     {
+        override public string ToString()
+        {
+
+        }
     }
 }
