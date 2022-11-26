@@ -52,7 +52,7 @@ namespace lab4TestsGenerator.Core
             {
                 Directory.CreateDirectory(resDir);
             }
-            // 1) prepare dataflow
+            // prepare dataflow
             var readFiles = new TransformBlock<string, StringPair>(
                 async path => new StringPair(Path.GetFileName(path), await FileRead(path)),
                 new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = _maxReadingTask });
@@ -71,7 +71,7 @@ namespace lab4TestsGenerator.Core
 
             readFiles.LinkTo(processFiles, linkOptions);
             processFiles.LinkTo(writeFiles, linkOptions);
-
+            // launch for all files in the dir
             foreach (var filePath in Directory.GetFiles(srcDir))
             {
                 readFiles.Post(filePath);
@@ -113,6 +113,7 @@ namespace lab4TestsGenerator.Core
             foreach (var filedata in files)
             {
                 var resultFilePath = dirto + Path.DirectorySeparatorChar + filedata.Name + extensionCS;
+                Console.WriteLine(resultFilePath);
                 using (var sw = new StreamWriter(resultFilePath))
                 {
                     await sw.WriteAsync(filedata.Value);

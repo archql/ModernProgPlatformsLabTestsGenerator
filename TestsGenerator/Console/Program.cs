@@ -7,7 +7,7 @@ using lab4TestsGenerator.Core;
 
 namespace lab4TestsGenerator.ConsoleApp;
 
-class Program
+public class Program
 {
 
     static void ParseDirArgs(string[] args, out string srcDir, out string resDir)
@@ -25,16 +25,8 @@ class Program
         return true;
     }
 
-    static async Task Main(string[] args)
+    public static PipeLine? GetPipeLine(string[] args, out string srcDir, out string resDir, bool test = false)
     {
-        // test!!!
-        bool test = true;
-        // 
-        string srcDir;
-        string resDir;
-
-        PipeLine? p = null;
-
         // Display the number of command line arguments.
         if (args.Length == 5)
         {
@@ -45,31 +37,35 @@ class Program
             isOk &= TryParseInt(args[4], out var maxProcessTasks);
             if (isOk)
             {
-                p = new PipeLine(maxLoadTasks, maxProcessTasks, maxSaveTasks);
+                return new PipeLine(maxLoadTasks, maxProcessTasks, maxSaveTasks);
             }
         }
-        else if(args.Length == 3)
+        else if (args.Length == 3)
         {
             ParseDirArgs(args, out srcDir, out resDir);
             if (TryParseInt(args[2], out var maxTasks))
             {
-                p = new PipeLine(maxTasks);
+                return new PipeLine(maxTasks);
             }
         }
-        else if(test || (args.Length == 1 && args[0].Equals("default")))
+        else if (test || (args.Length == 1 && args[0].Equals("default")))
         {
-            srcDir = "tests/src/";
-            resDir = "tests/res/";
-            p = new PipeLine();
+            srcDir = "@tests/src/";
+            resDir = "@tests/res/";
+            return new PipeLine();
         }
-        else
-        {
-            Console.WriteLine("Wrong arguments!");
-            return;
-        }
+        Console.WriteLine("Wrong arguments!");
+        srcDir = "";
+        resDir = "";
+        return null;
+    }
+
+    static async Task Main(string[] args)
+    {
+        PipeLine? p = GetPipeLine(args, out var srcDir, out var resDir, true);
         if (p == null)
         {
-            Console.WriteLine("Fail!");
+            Console.WriteLine("Wrong arguments!");
             return;
         }
         Console.WriteLine("Pipeline created!");

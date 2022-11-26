@@ -11,10 +11,12 @@ namespace lab4TestsGenerator.Core
     public class Test
     {
         public string ClassName { get; private set; }
+        public string NamespaceName { get; private set; }
 
-        public Test(string className, SyntaxTree? tree)
+        public Test(string className, string namespaceName, SyntaxTree? tree)
         {
             ClassName = className;
+            NamespaceName = namespaceName;
             _tree = tree;
         }
 
