@@ -26,7 +26,6 @@ namespace lab4TestsGenerator.Core
             {
                 if (fsn != null)
                 {
-                    Console.WriteLine("wewdeswe");
                     fileScopedNamespace = SyntaxFactory.FileScopedNamespaceDeclaration(
                         SyntaxFactory.QualifiedName(fsn.Name, SyntaxFactory.IdentifierName(NamespaceName)));
                     hasFilescopedNamespace = true;
@@ -132,7 +131,7 @@ namespace lab4TestsGenerator.Core
             // using ...
             NamespaceDeclarationSyntax? currNamespace = classDeclaration.Parent as NamespaceDeclarationSyntax;
 
-            SyntaxTree tree; string namespaceName = "";
+            SyntaxTree tree; string namespaceName = NamespaceName;
             if (hasFilescopedNamespace)
             {
                 tree = CSharpSyntaxTree.Create(
@@ -148,13 +147,14 @@ namespace lab4TestsGenerator.Core
             {
                 if (currNamespace != null)
                 {
-                    namespaceName = currNamespace.Name.ToString();
+                    namespaceName = currNamespace.Name.ToString() + '.' + NamespaceName;
                 }
                 tree = CSharpSyntaxTree.Create(
                     SyntaxFactory.CompilationUnit()
                         .WithUsings(SyntaxFactory.List(_usings))
                         .AddMembers(SyntaxFactory.NamespaceDeclaration(
-                                SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName(namespaceName), SyntaxFactory.IdentifierName(NamespaceName)))
+                                //SyntaxFactory.QualifiedName(SyntaxFactory.IdentifierName(namespaceName), SyntaxFactory.IdentifierName(NamespaceName)))
+                                SyntaxFactory.IdentifierName(namespaceName))
                             .AddMembers(classDecl))
                         .NormalizeWhitespace()
                     );

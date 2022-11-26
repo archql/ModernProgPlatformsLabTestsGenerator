@@ -93,7 +93,7 @@ namespace lab4TestsGenerator.Core
 
             foreach (var testContent in tests)
             {
-                var resultName = srcFile.Name + "_" + testContent.ClassName;
+                var resultName = srcFile.Name + '_' + testContent.NamespaceName + "_" + testContent.ClassName;
                 results.Add(new StringPair(resultName, testContent.ToString()));
             }
             return results;
